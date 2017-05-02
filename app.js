@@ -34,7 +34,7 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 // *------------------------*
 
-// Seed file
+// Seed file used to reset DB and give inital conntent
 seedDB()
 
 // index Routes
@@ -107,10 +107,17 @@ http.listen(3000,function () {
 })
 
 
+// Socket configuration
 
-
-// File manipulation
-
+// io.on("connection",function (socket) {
+//   console.log("a user is connected");
+//   setTimeout(interval(socket),10000)
+//   socket.on("disconnect",function () {
+//     console.log("User disconnected");
+//   })
+//
+// })
+// File manipulation and databak content will be changed
 function readFile() {
   // !!! global variable used json
   fs.readFile('Data/file.json', 'utf8', function (err,data) {
@@ -144,8 +151,6 @@ function readFile() {
 })
 return this.json
 }
-
-
 // not efficient , but a way to make the vlaues dynmaic
 function interval(socket){
   setInterval(function () {
@@ -157,15 +162,68 @@ function interval(socket){
 }
 
 
+// ******************************
+// *******Try with watchFile ****
+// ******************************
+// **** Funktional **************
+// ******************************
 
 
-// Socket configuration
 
-io.on("connection",function (socket) {
-  console.log("a user is connected");
-  setTimeout(interval(socket),10000)
-  socket.on("disconnect",function () {
-    console.log("User disconnected");
+  io.on("connection",function (socket) {
+    console.log("a user is connected");
+    // using watchfile prvided by Node.js (fs)
+    // change detected
+    fs.watchFile("Data/file.json",change)
+
+    // if we recive an empty object
+    // !!!! Error handeling must be improved
+    socket.on("sendagain",function () {
+      io.sockets.emit("readFile", this.json)
+    })
+    socket.on("disconnect",function () {
+      console.log("User disconnected");
+    })
+
   })
 
-})
+function change(curr ,prev) {
+  if (curr.size != prev.size) {
+    // there has been a change
+    // read change
+    fs.readFile("Data/file.json",function (err,data) {
+      if (err) {
+        throw err
+      }
+      this.json = JSON.parse(data)
+      // change db
+      changeDB(this.json)
+      // eimt readFile event
+      io.sockets.emit("readFile",this.json)
+    })
+  }
+}
+
+function changeDB(json) {
+  Sensor.findOneAndUpdate({name:json["Temp"].name},{$set:{value:json["Temp"].value}},function (err,updVal) {
+    if (err) {
+      console.log(err);
+    } else {
+      // console.log(updVal);
+    }
+  })
+  Sensor.findOneAndUpdate({name:json["Luftfeut"].name},{$set:{value:json["Luftfeut"].value}},function (err,updVal) {
+    if (err) {
+      console.log(err);
+    } else {
+      // console.log(updVal);
+    }
+  })
+  Sensor.findOneAndUpdate({name:json["Licht"].name},{$set:{value:json["Licht"].value}},function (err,updVal) {
+    if (err) {
+      console.log(err);
+    } else {
+      // console.log(updVal);
+    }
+  })
+}
