@@ -1,0 +1,177 @@
+<% include partials/header %>
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="5">
+    <title>Version 0.1</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/master.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+  <div class="container">
+
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">GMO</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="/stats">Stats</a></li>
+            <li><a href="/plants">Plants</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Sign Up</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+-->
+<div class="container">
+
+
+<script src="/js/Chart.js"></script>
+
+<h1>Stats</h1>
+<div class="container">
+    <% sensors.forEach(function(sensor){%>
+      <div class="col-md-4 col-sm-6">
+        <h4><%=sensor.name%>: <span id="<%=sensor.name%>"><%=sensor.value%></span></h4>
+      </div>
+    <%})%>
+  </div>
+
+
+
+<script>
+  $(function() {
+    var socket = io()
+      socket.on("readFile",function (data) {
+      var dt = data
+      if(dt===null){
+        socket.emit("sendagain")
+      }else {
+        var temp = dt["Temp"]
+        var Luftfeut = dt["Luftfeut"]
+        var Licht = dt["Licht"]
+        $("#"+temp.name).text(temp.value)
+        $("#"+Luftfeut.name).text(Luftfeut.value)
+        $("#"+Licht.name).text(Licht.value)
+      }
+      })
+  })
+</script>
+
+
+
+<!-- <div class="row">
+    <div class="col-md-6">
+      <h2>Graph</h2>
+      <canvas id="myChart" width="100" height="100"></canvas>
+      <canvas id="lineChart" width="100" height="100"></canvas>
+    </div>
+    <div class="col-md-6">
+      <div class="jumbotron">
+        <h1>smth</h1>
+      </div>
+    </div>
+
+    <!-- Script form Graph.js , See the Docu for more information-->
+<!--
+<script>
+var temp = document.getElementById('temp').textContent
+var luftfeut= document.getElementById('luftfeut').textContent
+var boden = document.getElementById('boden').textContent
+var sonne = document.getElementById('sonne').textContent
+var pad = document.getElementById('pad').textContent
+var luft = document.getElementById('luft').textContent
+var led = document.getElementById('led').textContent
+
+// TODO: radar chart is beter for data collections or lineChart
+
+var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+      labels: ["temp", "luftfeutigkeit", "boden", "sonne", "pad", "luft","led"],
+      datasets: [{
+          data: [temp, luftfeut, boden, sonne, pad, luft,led],
+          backgroundColor: [
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+              'rgba(255, 159, 64, 0.6)',
+              'rgba(120, 0, 164, 0.6)'
+          ],
+          borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(120, 0, 164, 0.6)'
+          ],
+          borderWidth: 0.5
+      }]
+  },
+  options: {
+      scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero:true
+              }
+          }]
+      },responsive:true
+  }
+});
+
+var data = {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [
+        {
+            label: "My First dataset",
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: [65, 59, 80, 81, 56, 55, 40],
+            spanGaps: false,
+        }
+    ]
+};
+var lineChart = document.getElementById("lineChart")
+var myLineChart = Chart.Line(lineChart,{
+  data:data,
+  options:options
+})
+
+</script>
+-->
+
+<% include partials/footer %>
