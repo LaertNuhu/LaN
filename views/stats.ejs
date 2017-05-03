@@ -44,32 +44,177 @@
 
 <h1>Stats</h1>
 <div class="container">
-    <% sensors.forEach(function(sensor){%>
-      <div class="col-md-4 col-sm-6">
-        <h4><%=sensor.name%>: <span id="<%=sensor.name%>"><%=sensor.value%></span></h4>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="well">
+        <form>
+          <div class="form-group">
+            <label for="periode">Periode</label>
+            <select id="periode"class="form-control" name="periode">
+              <option>A day ago</option>
+              <option>A Week ago</option>
+              <option>A Month ago</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sensord">Sensor</label>
+            <select id="sensord"class="form-control" name="sensord">
+              <option>Temp</option>
+              <option>Luftfeut</option>
+              <option>Licht</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary"type="submit" name="button">Go</button>
+          </div>
+        </form>
       </div>
-    <%})%>
+    </div>
+    <div class="col-md-8">
+      <% sensors.forEach(function(sensor){%>
+        <div class="col-md-4 col-sm-6">
+          <h4><%=sensor.name%>: <span id="<%=sensor.name%>"><%=sensor.value%></span></h4>
+        </div>
+        <%})%>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <canvas id="lineChart" width="100" height="100"></canvas>
+    </div>
+  </div>
   </div>
 
-
-
 <script>
-  $(function() {
-    var socket = io()
-      socket.on("readFile",function (data) {
-      var dt = data
-      if(dt===null){
-        socket.emit("sendagain")
+var line = $("")
+var index = []
+var sensordt =[]
+<% sensors.forEach(function(sensor){%>
+  index.push(sensordt.push(<%=sensor.value%>))
+  <%})%>
+
+  function data(index) {
+    var data=[]
+    for (var i = 0; i < index.length; i++) {
+      if (i==0) {
+        data.push(sensordt.splice(0,index[i]))
       }else {
-        var temp = dt["Temp"]
-        var Luftfeut = dt["Luftfeut"]
-        var Licht = dt["Licht"]
-        $("#"+temp.name).text(temp.value)
-        $("#"+Luftfeut.name).text(Luftfeut.value)
-        $("#"+Licht.name).text(Licht.value)
+        data.push(sensordt.splice(0,index[i]-index[i-1]))
       }
-      })
+    }
+    return data
+  }
+
+var datag = data(index)
+
+$(function() {
+  var socket = io()
+  socket.on("readFile",function (content) {
+    var dt = content
+    if(dt===null){
+      socket.emit("sendagain")
+    }else {
+      var temp = dt["Temp"]
+      var Luftfeut = dt["Luftfeut"]
+      var Licht = dt["Licht"]
+      $("#"+temp.name).text(temp.value)
+      $("#"+Luftfeut.name).text(Luftfeut.value)
+      $("#"+Licht.name).text(Licht.value)
+    }
   })
+})
+
+
+
+// console.log(sensordt.splice(0,4));
+// console.log(data(index));
+// console.log(sensordt);
+
+
+  var indx=0
+  var datagraph = {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [
+      {
+        label: "My First dataset",
+        fill: false,
+        lineTension: 0.1,
+        backgroundColor: "rgba(75,192,192,0.4)",
+        borderColor: "rgba(75,192,192,1)",
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: "rgba(75,192,192,1)",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        pointHoverBorderColor: "rgba(220,220,220,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data: datag[indx],
+        spanGaps: false,
+      }
+    ]
+  };
+
+  var lineChart = document.getElementById("lineChart")
+  var myLineChart = Chart.Line(lineChart,{
+    data:datagraph
+  })
+
+
+$("#sensord").change(function () {
+  switch ($(this).val()) {
+    case "Temp":
+    indx=0
+    break;
+    case "Luftfeut":
+    indx=1
+    break;
+    case "Licht":
+    indx=2
+    break;
+    default: indx=0
+  }
+  var datagraph = {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [
+      {
+        label: "My First dataset",
+        fill: false,
+        lineTension: 0.1,
+        backgroundColor: "rgba(75,192,192,0.4)",
+        borderColor: "rgba(75,192,192,1)",
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: "rgba(75,192,192,1)",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        pointHoverBorderColor: "rgba(220,220,220,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data: datag[indx],
+        spanGaps: false,
+      }
+    ]
+  };
+
+  var lineChart = document.getElementById("lineChart")
+  var myLineChart = Chart.Line(lineChart,{
+    data:datagraph
+  })
+})
+
+
 </script>
 
 

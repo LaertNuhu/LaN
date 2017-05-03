@@ -3,8 +3,8 @@ var passportLocalMongoose = require("passport-local-mongoose")
 
 var SensorSchema = new mongoose.Schema({
   name:String,
-  value:[String],
-  soll:String
+  value:[Number],
+  soll:Number
 })
 
 SensorSchema.plugin(passportLocalMongoose)

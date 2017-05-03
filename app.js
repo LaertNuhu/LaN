@@ -188,7 +188,7 @@ function interval(socket){
   })
 
 function change(curr ,prev) {
-  if (curr.size != prev.size) {
+  if (curr.size != prev.size | curr!=prev) {
     // there has been a change
     // read change
     fs.readFile("Data/file.json",function (err,data) {
