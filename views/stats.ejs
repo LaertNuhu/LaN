@@ -73,7 +73,7 @@
     <div class="col-md-8">
       <% sensors.forEach(function(sensor){%>
         <div class="col-md-4 col-sm-6">
-          <h4><%=sensor.name%>: <span id="<%=sensor.name%>"><%=sensor.value%></span></h4>
+          <h4><%=sensor.name%>:</h4> <span id="<%=sensor.name%>"><%=sensor.value%></span>
         </div>
         <%})%>
     </div>
@@ -94,27 +94,29 @@ var sensordt =[]
   index.push(sensordt.push(<%=sensor.value%>))
   <%})%>
 
-  function data(index) {
+  function data(index,sens) {
     var data=[]
     for (var i = 0; i < index.length; i++) {
       if (i==0) {
-        data.push(sensordt.splice(0,index[i]))
+        data.push(sens.splice(0,index[i]))
       }else {
-        data.push(sensordt.splice(0,index[i]-index[i-1]))
+        data.push(sens.splice(0,index[i]-index[i-1]))
       }
     }
     return data
   }
 
-var datag = data(index)
+var datag = data(index,sensordt)
 
 $(function() {
   var socket = io()
   socket.on("readFile",function (content) {
     var dt = content
     if(dt===null){
+      console.log(dt);
       socket.emit("sendagain")
     }else {
+      console.log(dt);
       var temp = dt["Temp"]
       var Luftfeut = dt["Luftfeut"]
       var Licht = dt["Licht"]
@@ -130,11 +132,20 @@ $(function() {
 // console.log(sensordt.splice(0,4));
 // console.log(data(index));
 // console.log(sensordt);
+var arry = []
+var label = []
+datag.forEach(function (data) {
+  for (var i = 1; i <= data.length; i++) {
+    arry.push(i)
+  }
+})
 
+label = data(index,arry)
+console.log(arry);
 
   var indx=0
   var datagraph = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels:label[indx],
     datasets: [
       {
         label: "My First dataset",
@@ -180,8 +191,28 @@ $("#sensord").change(function () {
     break;
     default: indx=0
   }
-  var datagraph = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+
+
+  index = []
+  sensordt =[]
+  <% sensors.forEach(function(sensor){%>
+    index.push(sensordt.push(<%=sensor.value%>))
+    <%})%>
+  datag = data(index,sensordt)
+
+var arry = []
+var label = []
+datag.forEach(function (data) {
+  for (var i = 1; i <= data.length; i++) {
+    arry.push(i)
+  }
+})
+
+label = data(index,arry)
+console.log(arry);
+  // console.log(datag[indx]);
+  datagraph = {
+    labels: label[indx],
     datasets: [
       {
         label: "My First dataset",
@@ -208,8 +239,8 @@ $("#sensord").change(function () {
     ]
   };
 
-  var lineChart = document.getElementById("lineChart")
-  var myLineChart = Chart.Line(lineChart,{
+  // lineChart = document.getElementById("lineChart")
+  myLineChart = Chart.Line(lineChart,{
     data:datagraph
   })
 })
