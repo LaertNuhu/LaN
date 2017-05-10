@@ -33,6 +33,10 @@ passport.use(new passportLocal(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 // *------------------------*
+app.use(function (req,res,next) {
+  res.locals.currentUser = req.user
+  next()
+})
 
 // Seed file used to reset DB and give inital conntent
 seedDB()
@@ -42,7 +46,7 @@ app.get("/",function (req,res) {
   res.render("home")
 })
 
-app.get("/stats",function (req,res) {
+app.get("/stats",isLoggedIn ,function (req,res) {
   Sensor.find({},function (err, sensors) {
     if (err) {
       console.log(err);
@@ -53,7 +57,7 @@ app.get("/stats",function (req,res) {
 })
 
 
-app.get("/plants",function (req,res) {
+app.get("/plants",isLoggedIn ,function (req,res) {
   res.render("plants")
 })
 
@@ -100,6 +104,12 @@ app.get("/logout",function (req,res) {
   req.logout()
   res.redirect("/")
 })
+
+function isLoggedIn(req,res,next) {
+  if(req.isAuthenticated())
+  return next()
+  res.redirect("/login")
+}
 
 
 http.listen(3000,function () {
@@ -174,6 +184,16 @@ function interval(socket){
     console.log("a user is connected");
     // using watchfile prvided by Node.js (fs)
     // change detected
+    fs.readFile("Data/file.json",function (err,data) {
+      if (err) {
+        throw err
+      }
+      this.json = JSON.parse(data)
+      // change db
+      changeDB(this.json)
+      // eimt readFile event
+      io.sockets.emit("readFile",this.json)
+    })
     fs.watchFile("Data/file.json",change)
 
     // if we recive an empty object
