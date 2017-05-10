@@ -1,0 +1,4 @@
+Verantwortlich:
+Laert
+Valentin
+Adrian
