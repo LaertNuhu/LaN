@@ -47,6 +47,7 @@ app.get("/",function (req,res) {
 })
 
 app.get("/stats",isLoggedIn ,function (req,res) {
+  readFile()
   Sensor.find({},function (err, sensors) {
     if (err) {
       console.log(err);
@@ -56,6 +57,9 @@ app.get("/stats",isLoggedIn ,function (req,res) {
   })
 })
 
+app.get("/go",function (req,res) {
+  res.redirect("/stats")
+})
 
 app.get("/plants",isLoggedIn ,function (req,res) {
   res.render("plants")
@@ -159,7 +163,6 @@ function readFile() {
     }
   })
 })
-return this.json
 }
 // not efficient , but a way to make the vlaues dynmaic
 function interval(socket){
