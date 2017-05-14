@@ -12,8 +12,15 @@ var express = require ("express"),
     io = require("socket.io")(http),
     User = require("./models/user"),
     Sensor= require("./models/sensor"),
-    seedDB = require("./seed")
+    seedDB = require("./seed"),
+    mysql = require('mysql')
 
+var statsRoute = require("./routes/stats")
+var plantsRoute = require("./routes/plants")
+var indexRoute = require("./routes/index")
+
+// mongoose will be deleted
+// database connection is beeing handeled at config files
 mongoose.connect("mongodb://localhost/projekt")
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended:true}))
@@ -21,6 +28,8 @@ app.use(methodOverride("_method"))
 app.use(express.static("public"))
 
 // * Passport Configuration *
+require('./config/passport')(passport);
+
 app.use(expressSession({
   secret:"jeff , my name is jeff", // wil be used to encode and decode the session
   resave:false,
@@ -28,11 +37,11 @@ app.use(expressSession({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
-// takes the data and encodes it and put it in session and deencodes it
-passport.use(new passportLocal(User.authenticate()))
-passport.serializeUser(User.serializeUser())
-passport.deserializeUser(User.deserializeUser())
-// *------------------------*
+// // takes the data and encodes it and put it in session and deencodes it
+// passport.use(new passportLocal(User.authenticate()))
+// passport.serializeUser(User.serializeUser())
+// passport.deserializeUser(User.deserializeUser())
+// // *------------------------*
 app.use(function (req,res,next) {
   res.locals.currentUser = req.user
   next()
@@ -41,80 +50,9 @@ app.use(function (req,res,next) {
 // Seed file used to reset DB and give inital conntent
 seedDB()
 
-// index Routes
-app.get("/",function (req,res) {
-  res.render("home")
-})
-
-app.get("/stats",isLoggedIn ,function (req,res) {
-  readFile()
-  Sensor.find({},function (err, sensors) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render("stats",{sensors:sensors})
-    }
-  })
-})
-
-app.get("/go",function (req,res) {
-  res.redirect("/stats")
-})
-
-app.get("/plants",isLoggedIn ,function (req,res) {
-  res.render("plants")
-})
-
-
-// Authentication Routes
-
-// Login
-app.get("/login",function (req,res) {
-  res.render("login")
-})
-app.post("/login",passport.authenticate("local",{
-  successRedirect:"/stats",
-  failureRedirect:"/login"
-}),function (req,res) {})
-
-
-// Register
-app.get("/register",function (req,res,err) {
-  res.render("register",{err:err})
-})
-
-app.post("/register",function (req,res) {
-  var username = req.body.username
-  var password = req.body.password
-  var newUser =new User({username:username})
-  User.register(newUser,password,function (err,user) {
-    if (err) {
-      console.log(err);
-      if (err.message) {
-        return res.redirect("login")
-      } else {
-      return res.render("register",{err:err})
-        }
-    }
-    passport.authenticate("local")(req,res,function () {
-      res.redirect("/stats")
-    })
-  })
-})
-
-
-// Logout
-app.get("/logout",function (req,res) {
-  req.logout()
-  res.redirect("/")
-})
-
-function isLoggedIn(req,res,next) {
-  if(req.isAuthenticated())
-  return next()
-  res.redirect("/login")
-}
-
+app.use(statsRoute)
+app.use(indexRoute)
+app.use(plantsRoute)
 
 http.listen(3000,function () {
   console.log("Listening on port 3000");
@@ -123,14 +61,6 @@ http.listen(3000,function () {
 
 // Socket configuration
 
-// io.on("connection",function (socket) {
-//   console.log("a user is connected");
-//   setTimeout(interval(socket),10000)
-//   socket.on("disconnect",function () {
-//     console.log("User disconnected");
-//   })
-//
-// })
 // File manipulation and databak content will be changed
 function readFile() {
   // !!! global variable used json

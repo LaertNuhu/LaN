@@ -9,3 +9,5 @@ var SensorSchema = new mongoose.Schema({
 
 SensorSchema.plugin(passportLocalMongoose)
 module.exports = mongoose.model("Sensor",SensorSchema)
+
+// There is no need for this . config files will be used.
