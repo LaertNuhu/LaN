@@ -3,9 +3,11 @@
 <div class="wrapper">
 <form class="form-signin" action="/register" method="post">
   <h2 class="form-signin-heading">Sign Up</h2>
-    <input class="form-control" type="text" name="username" placeholder="username" value="" required="" autofocus="">
-    <input class="form-control" type="password" name="password" placeholder="password" value="" required="">
-    <button class="btn btn-success form-control"type="submit" name="button">Sign Up</button>
+  <input class="form-control" type="text" name="name" placeholder="name" value="" required="" autofocus="">
+  <input class="form-control" type="text" name="lastname" placeholder="lastname" value="" required="">
+  <input class="form-control" type="text" name="username" placeholder="username" value="" required="" >
+  <input class="form-control" type="password" name="password" placeholder="password" value="" required="">
+  <button class="btn btn-success form-control"type="submit" name="button">Sign Up</button>
 </form>
 </div>
 <% include partials/footer %>

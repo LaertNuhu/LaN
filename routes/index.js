@@ -40,24 +40,24 @@ router.get("/register",function (req,res,err) {
   res.render("register",{err:err})
 })
 
-router.post("/register",function (req,res) {
-  var username = req.body.username
-  var password = req.body.password
-  var newUser =new User({username:username})
-  User.register(newUser,password,function (err,user) {
-    if (err) {
-      console.log(err);
-      if (err.message) {
-        return res.redirect("login")
-      } else {
-      return res.render("register",{err:err})
-        }
-    }
-    passport.authenticate("local")(req,res,function () {
-      res.redirect("/stats")
-    })
-  })
-})
+// router.post("/register",function (req,res) {
+//   var username = req.body.username
+//   var password = req.body.password
+//   var newUser =new User({username:username})
+//   User.register(newUser,password,function (err,user) {
+//     if (err) {
+//       console.log(err);
+//       if (err.message) {
+//         return res.redirect("login")
+//       } else {
+//       return res.render("register",{err:err})
+//         }
+//     }
+//     passport.authenticate("local")(req,res,function () {
+//       res.redirect("/stats")
+//     })
+//   })
+// })
 
 
 // Logout

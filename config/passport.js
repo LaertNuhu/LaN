@@ -57,15 +57,16 @@ module.exports = function(passport) {
                     // if there is no user with that username
                     // create the user
                     var newUser = {
+                        name:req.body.name,
+                        lastname:req.body.lastname,
                         username: username,
                         password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
                     };
 
-                    var insertQuery = "INSERT INTO users ( username, password ) values (?,?)";
+                    var insertQuery = "INSERT INTO users (name, lastname, username, password ) values (?,?,?,?)";
 
-                    connection.query(insertQuery,[newUser.username, newUser.password],function(err, rows) {
+                    connection.query(insertQuery,[newUser.name,newUser.lastname,newUser.username, newUser.password],function(err, rows) {
                         newUser.id = rows.insertId;
-
                         return done(null, newUser);
                     });
                 }
@@ -96,12 +97,12 @@ module.exports = function(passport) {
                 }
 
                 // if the user is found but the password is wrong
-                if (!bcrypt.compareSync(password, rows[0].password))
+                if (!bcrypt.compareSync(password, rows[0].password)){
                 // !! uncomment after adding flash
                 // return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
-                return done (null ,false)
                 console.log("Wrong password");
-
+                return done (null ,false)
+                }
                 // all is well, return successful user
                 return done(null, rows[0]);
             });
@@ -112,6 +113,8 @@ module.exports = function(passport) {
 /*
 CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.users_table + '` ( \
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
+    `name` VARCHAR(20) NOT NULL, \
+    `lastname` CHAR(60) NOT NULL, \
     `username` VARCHAR(20) NOT NULL, \
     `password` CHAR(60) NOT NULL, \
         PRIMARY KEY (`id`), \
