@@ -15,3 +15,17 @@ span{
   background: -webkit-linear-gradient(to right, #B5AC49, #3CA55C);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #B5AC49, #3CA55C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+#plants{
+  text-align: center;
+  width: 50%;
+  margin: 30px auto;
+  padding: 30px;
+  line-height: 30px;
+}
+.pflanzeName{
+  margin-bottom: 20px;
+}
+.send{
+  margin-top: 20px;
+  width: 50%;
+}

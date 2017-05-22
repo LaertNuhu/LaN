@@ -1,15 +1,20 @@
 var express =require("express")
 var router = express.Router(),
+    mysql = require('mysql'),
+    dbconfig = require('../config/database'),
     Sensor = require("../models/sensor")
 
 
 
+var connection = mysql.createConnection(dbconfig.connection);
+
+// Create the Messung tabele and do the search. Change the graph conf.
 router.get("/stats",isLoggedIn ,function (req,res) {
   Sensor.find({},function (err, sensors) {
     if (err) {
       console.log(err);
     } else {
-      res.render("stats",{sensors:sensors})
+      res.render("stats/stats",{sensors:sensors})
     }
   })
 })

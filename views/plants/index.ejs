@@ -1,0 +1,19 @@
+<% include ../partials/header %>
+
+<div class="container">
+  <div class="row">
+      <%plants.forEach(function(plant){%>
+        <div class="col-md-3">
+          <div class="well">
+            <p>
+              <span>Name: <b> <%=plant.pflanzeName%> </b></span>
+              <a class="btn btn-info btn-sm"href="/plants/<%=plant.id%>">Show</a>
+            </p>
+          </div>
+        </div>
+        <%})%>
+        <a href="/plants/new">New</a>
+  </div>
+</div>
+
+<% include ../partials/footer %>

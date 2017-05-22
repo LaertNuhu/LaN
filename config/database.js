@@ -5,5 +5,6 @@ module.exports = {
         'password': '5207'
     },
 	'database': 'my_schema', // database schema name must be changed !!
-    'users_table': 'users' // user , meassures and other tabels will be added
+    'users_table': 'users', // user , meassures and other tabels will be added
+    'pflanzen_table':'pflanzen'
 };
