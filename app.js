@@ -13,7 +13,8 @@ var express = require ("express"),
     User = require("./models/user"),
     Sensor= require("./models/sensor"),
     seedDB = require("./seed"),
-    mysql = require('mysql')
+    mysql = require('mysql'),
+    MySQLEvents = require('mysql-events')
 
 var statsRoute = require("./routes/stats")
 var plantsRoute = require("./routes/plants")
@@ -61,122 +62,7 @@ http.listen(3000,function () {
 
 // Socket configuration
 
-// File manipulation and databak content will be changed
-function readFile() {
-  // !!! global variable used json
-  fs.readFile('Data/file.json', 'utf8', function (err,data) {
-  if (err) {
-    return console.log(err);
-  }
-  this.json = JSON.parse(data);
-  // console.log(json);
-  // console.log(json["Temp"].value);
-  Sensor.findOneAndUpdate({name:json["Temp"].name},{$set:{value:json["Temp"].value}},function (err,updVal) {
-    if (err) {
-      console.log(err);
-    } else {
-      // console.log(updVal);
-    }
-  })
-  Sensor.findOneAndUpdate({name:json["Luftfeut"].name},{$set:{value:json["Luftfeut"].value}},function (err,updVal) {
-    if (err) {
-      console.log(err);
-    } else {
-      // console.log(updVal);
-    }
-  })
-  Sensor.findOneAndUpdate({name:json["Licht"].name},{$set:{value:json["Licht"].value}},function (err,updVal) {
-    if (err) {
-      console.log(err);
-    } else {
-      // console.log(updVal);
-    }
-  })
+io.on("connection",function (socket) {
+  console.log("Connected");
+  io.emit("first","hallo")
 })
-}
-// not efficient , but a way to make the vlaues dynmaic
-function interval(socket){
-  setInterval(function () {
-    io.sockets.emit("readFile", readFile())
-    socket.on("sendagain",function () {
-      io.sockets.emit("readFile", readFile())
-    })
-  },3000)
-}
-
-
-// ******************************
-// *******Try with watchFile ****
-// ******************************
-// **** Funktional **************
-// ******************************
-
-
-
-  io.on("connection",function (socket) {
-    console.log("a user is connected");
-    // using watchfile prvided by Node.js (fs)
-    // change detected
-    fs.readFile("Data/file.json",function (err,data) {
-      if (err) {
-        throw err
-      }
-      this.json = JSON.parse(data)
-      // change db
-      changeDB(this.json)
-      // eimt readFile event
-      io.sockets.emit("readFile",this.json)
-    })
-    fs.watchFile("Data/file.json",change)
-
-    // if we recive an empty object
-    // !!!! Error handeling must be improved
-    socket.on("sendagain",function () {
-      io.sockets.emit("readFile", this.json)
-    })
-    socket.on("disconnect",function () {
-      console.log("User disconnected");
-    })
-
-  })
-
-function change(curr ,prev) {
-  if (curr.size != prev.size | curr!=prev) {
-    // there has been a change
-    // read change
-    fs.readFile("Data/file.json",function (err,data) {
-      if (err) {
-        throw err
-      }
-      this.json = JSON.parse(data)
-      // change db
-      changeDB(this.json)
-      // eimt readFile event
-      io.sockets.emit("readFile",this.json)
-    })
-  }
-}
-
-function changeDB(json) {
-  Sensor.findOneAndUpdate({name:json["Temp"].name},{$set:{value:json["Temp"].value}},function (err,updVal) {
-    if (err) {
-      console.log(err);
-    } else {
-      // console.log(updVal);
-    }
-  })
-  Sensor.findOneAndUpdate({name:json["Luftfeut"].name},{$set:{value:json["Luftfeut"].value}},function (err,updVal) {
-    if (err) {
-      console.log(err);
-    } else {
-      // console.log(updVal);
-    }
-  })
-  Sensor.findOneAndUpdate({name:json["Licht"].name},{$set:{value:json["Licht"].value}},function (err,updVal) {
-    if (err) {
-      console.log(err);
-    } else {
-      // console.log(updVal);
-    }
-  })
-}

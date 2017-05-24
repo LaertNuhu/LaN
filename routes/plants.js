@@ -75,7 +75,7 @@ router.get("/plants/:id",isLoggedIn,function (req,res) {
 
 // Edit
 router.get("/plants/:id/edit",isLoggedIn,function (req,res) {
-  console.log(req.params.id);
+  // console.log(req.params.id);
   connection.query('Select * from pflanzen where id = "'+req.params.id+'"',function (err,plant) {
     if (err) {
       console.log(err);
