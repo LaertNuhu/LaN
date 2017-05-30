@@ -29,3 +29,9 @@ span{
   margin-top: 20px;
   width: 50%;
 }
+#lineChart , #lineChart2{
+  margin: 0 0 40px 0;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 0 0 20px 20px;
+}

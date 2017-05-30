@@ -33,13 +33,6 @@ function randomData() {
 
 // Create the Messung tabele and do the search. Change the graph conf.
 router.get("/stats",isLoggedIn ,function (req,res) {
-  // Sensor.find({},function (err, sensors) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     res.render("stats/stats",{sensors:sensors})
-  //   }
-  // })
   connection.query('CREATE TABLE IF NOT EXISTS `Messung` (\
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,\
     `arduinoNr` int(11) NOT NULL,\
@@ -54,29 +47,29 @@ router.get("/stats",isLoggedIn ,function (req,res) {
       console.log(err);
     }
     console.log("Succsess");
-    connection.query('INSERT INTO Messung (arduinoNr, messungNr, luftfeuchtigkeit, bodenfeuchtigkeit,temperatur,lichtintensität) VALUES (?,?,?,?,?,?);', randomData(), function(err, result) {
-      if (err) {
-        console.log(err);
-      }
-      if(arduion1){
-        logischezeit1++
-        if (Math.random()*100 > 50) {
-          arduionzeit1++
-        }
-      }else{
-        logischezeit2++
-        if (Math.random()*100 > 50) {
-          arduionzeit2++
-        }
-      }
-      connection.query('Select * from Messung',function (err,sensors) {
+    // connection.query('INSERT INTO Messung (arduinoNr, messungNr, luftfeuchtigkeit, bodenfeuchtigkeit,temperatur,lichtintensität) VALUES (?,?,?,?,?,?);', randomData(), function(err, result) {
+      // if (err) {
+      //   console.log(err);
+      // }
+      // if(arduion1){
+      //   logischezeit1++
+      //   if (Math.random()*100 > 50) {
+      //     arduionzeit1++
+      //   }
+      // }else{
+      //   logischezeit2++
+      //   if (Math.random()*100 > 50) {
+      //     arduionzeit2++
+      //   }
+      // }
+      connection.query('Select * from Messung order by messungNr',function (err,sensors) {
         if (err) {
           console.log(err);
         }
         res.render("stats/stats",{sensors:sensors})
       })
     })
-  })
+  // })
 })
 
 function isLoggedIn(req,res,next) {

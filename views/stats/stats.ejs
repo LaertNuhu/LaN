@@ -1,359 +1,522 @@
 <% include ../partials/header %>
 
-<div class="container">
+  <div class="container">
 
 
-<script src="/js/Chart.js"></script>
+    <script src="/js/Chart.js"></script>
 
-<h1>Stats</h1>
-<div class="container">
-  <div class="row">
-    <div class="col-md-4">
-      <div class="well">
-        <form action="/go" method="get">
-          <div class="form-group">
-            <label for="periode">Periode</label>
-            <select id="selector"class="form-control" name="periode">
+    <h1>Stats</h1>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="well">
+            <form action="/go" method="get">
+              <div class="form-group">
+                <label for="periode">Arduino 1 - Periode</label>
+                <select id="selector" class="form-control" name="periode">
               <option>A day ago</option>
               <option>A Week ago</option>
               <option>A Month ago</option>
             </select>
+                <br>
+                <label for="periode2">Arduino 2 - Periode</label>
+                <select id="selector2" class="form-control" name="periode2">
+              <option>A day ago</option>
+              <option>A Week ago</option>
+              <option>A Month ago</option>
+            </select>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary" type="submit" name="button">Go</button>
+              </div>
+            </form>
           </div>
-          <div class="form-group">
-            <button class="btn btn-primary" type="submit" name="button">Go</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="col-md-8">
-      <!-- <% sensors.forEach(function(sensor){%>
+        </div>
+        <div class="col-md-8">
+          <!-- <% sensors.forEach(function(sensor){%>
         <div class="col-md-4 col-sm-6">
           <span id="<%=sensor.name%>"><%=sensor.arduinoNr%>:<%=sensor.luftfeuchtigkeit%></span>
         </div>
         <%})%> -->
-        <div class="col-md-4 col-sm-6">
-          <div class="well">
-            <label for="luftfeuchtigkeit">Luftfeuchtigkeit</label>
-            <span style="overflow:auto" id="luftfeuchtigkeit"></span>
+          <div class="col-md-4 col-sm-6">
+            <div class="well">
+              <label for="luftfeuchtigkeit">Luftfeuchtigkeit</label>
+              <span style="overflow:auto" id="luftfeuchtigkeit"></span>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="well">
+              <label for="luftfeuchtigkeit">Luftfeuchtigkeit 2</label>
+              <span style="overflow:auto" id="luftfeuchtigkeit2"></span>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="well">
+              <label for="bodenfeuchtigkeit">bodenfeuchtigkeit</label>
+              <span style="overflow:auto" id="bodenfeuchtigkeit"></span>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="well">
+              <label for="bodenfeuchtigkeit">bodenfeuchtigkeit 2</label>
+              <span style="overflow:auto" id="bodenfeuchtigkeit2"></span>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="well">
+              <label for="temperatur">temperatur</label>
+              <span style="overflow:auto" id="temperatur"></span>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="well">
+              <label for="temperatur">temperatur 2</label>
+              <span style="overflow:auto" id="temperatur2"></span>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="well">
+              <label for="lichtintensit">lichtintensit</label>
+              <span style="overflow:auto" id="lichtintensität"></span>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <div class="well">
+              <label for="lichtintensit">lichtintensit 2</label>
+              <span style="overflow:auto" id="lichtintensität2"></span>
+            </div>
           </div>
         </div>
-        <div class="col-md-4 col-sm-6">
-          <div class="well">
-            <label for="luftfeuchtigkeit">Luftfeuchtigkeit 2</label>
-            <span style="overflow:auto" id="luftfeuchtigkeit2"></span>
-          </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label for="lineChart">Arduino 1</label>
+          <canvas id="lineChart" width="100" height="100"></canvas>
         </div>
-        <div class="col-md-4 col-sm-6">
-          <div class="well">
-            <label for="bodenfeuchtigkeit">bodenfeuchtigkeit</label>
-            <span style="overflow:auto" id="bodenfeuchtigkeit"></span>
-          </div>
+        <div class="col-md-6">
+          <label for="lineChart2">Arduino 2</label>
+          <canvas id="lineChart2" width="100" height="100"></canvas>
         </div>
-        <div class="col-md-4 col-sm-6">
-          <div class="well">
-            <label for="bodenfeuchtigkeit">bodenfeuchtigkeit 2</label>
-            <span style="overflow:auto" id="bodenfeuchtigkeit2"></span>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-          <div class="well">
-            <label for="temperatur">temperatur</label>
-            <span style="overflow:auto" id="temperatur"></span>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-          <div class="well">
-            <label for="temperatur">temperatur 2</label>
-            <span style="overflow:auto" id="temperatur2"></span>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-          <div class="well">
-            <label for="lichtintensit">lichtintensit</label>
-            <span style="overflow:auto" id="lichtintensität"></span>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-          <div class="well">
-            <label for="lichtintensit">lichtintensit 2</label>
-            <span style="overflow:auto" id="lichtintensität2"></span>
-          </div>
-        </div>
+      </div>
     </div>
 
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      <canvas id="lineChart" width="100" height="100"></canvas>
-    </div>
-  </div>
-  </div>
+    <script>
+      // socket
+      $(document).ready(function() {
+        var socket = io()
+        socket.on("first", function(data) {
+          console.log(data);
+        })
+      })
+    </script>
+    <script type="text/javascript">
+      function results(param) {
+        var res = []
+        switch (param) {
+          case "temperatur":
+            <%sensors.forEach(function(entry){%>
+            <%if(entry["arduinoNr"]==1){%>
+            res.push(<%=entry["temperatur"]%>)
+            <%}%>
+            <%})%>
+            break;
+          case "luftfeuchtigkeit":
+            <%sensors.forEach(function(entry){%>
+            <%if(entry["arduinoNr"]==1){%>
+            res.push(<%=entry["luftfeuchtigkeit"]%>)
+            <%}%>
+            <%})%>
+            break;
+          case "messungNr":
+            <%sensors.forEach(function(entry){%>
+            <%if(entry["arduinoNr"]==1){%>
+            res.push(<%=entry["messungNr"]%>)
+            <%}%>
+            <%})%>
+            break;
+          case "bodenfeuchtigkeit":
+            <%sensors.forEach(function(entry){%>
+            <%if(entry["arduinoNr"]==1){%>
+            res.push(<%=entry["bodenfeuchtigkeit"]%>)
+            <%}%>
+            <%})%>
+            break;
+          case "lichtintensität":
+            <%sensors.forEach(function(entry){%>
+            <%if(entry["arduinoNr"]==1){%>
+            res.push(<%=entry["lichtintensität"]%>)
+            <%}%>
+            <%})%>
+            break;
+          case "temperatur2":
+            <%sensors.forEach(function(entry){%>
+            <%if(entry["arduinoNr"]==2){%>
+            res.push(<%=entry["temperatur"]%>)
+            <%}%>
+            <%})%>
+            break;
+          case "luftfeuchtigkeit2":
+            <%sensors.forEach(function(entry){%>
+            <%if(entry["arduinoNr"]==2){%>
+            res.push(<%=entry["luftfeuchtigkeit"]%>)
+            <%}%>
+            <%})%>
+            break;
+          case "messungNr2":
+            <%sensors.forEach(function(entry){%>
+            <%if(entry["arduinoNr"]==2){%>
+            res.push(<%=entry["messungNr"]%>)
+            <%}%>
+            <%})%>
+            break;
+          case "bodenfeuchtigkeit2":
+            <%sensors.forEach(function(entry){%>
+            <%if(entry["arduinoNr"]==2){%>
+            res.push(<%=entry["bodenfeuchtigkeit"]%>)
+            <%}%>
+            <%})%>
+            break;
+          case "lichtintensität2":
+            <%sensors.forEach(function(entry){%>
+            <%if(entry["arduinoNr"]==2){%>
+            res.push(<%=entry["lichtintensität"]%>)
+            <%}%>
+            <%})%>
+            break;
+        }
+        return res
+      }
 
-<script>
-// socket
-$(document).ready(function () {
-  var socket = io()
-  socket.on("first",function (data) {
-    console.log(data);
-  })
-})
+      var tempArry = results("temperatur")
+      $("#temperatur").text(tempArry)
+      var feutArry = results("luftfeuchtigkeit")
+      $("#luftfeuchtigkeit").text(feutArry)
+      var bodenArry = results("bodenfeuchtigkeit")
+      $("#bodenfeuchtigkeit").text(bodenArry)
+      var lichtArry = results("lichtintensität")
+      $("#lichtintensität").text(lichtArry)
 
-</script>
-<script type="text/javascript">
-function results(param) {
-  var res = []
-  switch (param) {
-    case "temperatur":
-    <%sensors.forEach(function(entry){%>
-      <%if(entry["arduinoNr"]==1){%>
-      res.push(<%=entry["temperatur"]%>)
-      <%}%>
-      <%})%>
-      break;
-    case "luftfeuchtigkeit":
-    <%sensors.forEach(function(entry){%>
-      <%if(entry["arduinoNr"]==1){%>
-      res.push(<%=entry["luftfeuchtigkeit"]%>)
-      <%}%>
-    <%})%>
-    break;
-    case "messungNr":
-    <%sensors.forEach(function(entry){%>
-      <%if(entry["arduinoNr"]==1){%>
-      res.push(<%=entry["messungNr"]%>)
-      <%}%>
-    <%})%>
-    break;
-    case "bodenfeuchtigkeit":
-    <%sensors.forEach(function(entry){%>
-      <%if(entry["arduinoNr"]==1){%>
-      res.push(<%=entry["bodenfeuchtigkeit"]%>)
-      <%}%>
-    <%})%>
-    break;
-    case "lichtintensität":
-    <%sensors.forEach(function(entry){%>
-      <%if(entry["arduinoNr"]==1){%>
-      res.push(<%=entry["lichtintensität"]%>)
-      <%}%>
-    <%})%>
-    break;
-    case "temperatur2":
-    <%sensors.forEach(function(entry){%>
-      <%if(entry["arduinoNr"]==2){%>
-      res.push(<%=entry["temperatur"]%>)
-      <%}%>
-      <%})%>
-      break;
-    case "luftfeuchtigkeit2":
-    <%sensors.forEach(function(entry){%>
-      <%if(entry["arduinoNr"]==2){%>
-      res.push(<%=entry["luftfeuchtigkeit"]%>)
-      <%}%>
-    <%})%>
-    break;
-    case "messungNr2":
-    <%sensors.forEach(function(entry){%>
-      <%if(entry["arduinoNr"]==2){%>
-      res.push(<%=entry["messungNr"]%>)
-      <%}%>
-    <%})%>
-    break;
-    case "bodenfeuchtigkeit2":
-    <%sensors.forEach(function(entry){%>
-      <%if(entry["arduinoNr"]==2){%>
-      res.push(<%=entry["bodenfeuchtigkeit"]%>)
-      <%}%>
-    <%})%>
-    break;
-    case "lichtintensität2":
-    <%sensors.forEach(function(entry){%>
-      <%if(entry["arduinoNr"]==1){%>
-      res.push(<%=entry["lichtintensität"]%>)
-      <%}%>
-    <%})%>
-    break;
-  }
-  return res
-}
+      var tempArry2 = results("temperatur2")
+      $("#temperatur2").text(tempArry2)
+      var feutArry2 = results("luftfeuchtigkeit2")
+      $("#luftfeuchtigkeit2").text(feutArry2)
+      var bodenArry2 = results("bodenfeuchtigkeit2")
+      $("#bodenfeuchtigkeit2").text(bodenArry2)
+      var lichtArry2 = results("lichtintensität2")
+      $("#lichtintensität2").text(lichtArry2)
 
-var tempArry = results("temperatur")
-$("#temperatur").text(tempArry)
-var feutArry = results("luftfeuchtigkeit")
-$("#luftfeuchtigkeit").text(feutArry)
-var bodenArry = results("bodenfeuchtigkeit")
-$("#bodenfeuchtigkeit").text(bodenArry)
-var lichtArry = results("lichtintensität")
-$("#lichtintensität").text(lichtArry)
+      var zeit = results("messungNr")
+      var zeit2 = results("messungNr2")
 
-var tempArry2 = results("temperatur2")
-$("#temperatur2").text(tempArry2)
-var feutArry2 = results("luftfeuchtigkeit2")
-$("#luftfeuchtigkeit2").text(feutArry2)
-var bodenArry2 = results("bodenfeuchtigkeit2")
-$("#bodenfeuchtigkeit2").text(bodenArry2)
-var lichtArry2 = results("lichtintensität2")
-$("#lichtintensität2").text(lichtArry2)
+      // console.log(zeit);
+      function duplicate_array(arra1) {
+        var i,
+          len = arra1.length,
+          result = [],
+          obj = {};
+        for (i = 0; i < len; i++) {
+          obj[arra1[i]] = 0;
+        }
+        for (i in obj) {
+          result.push(i);
+        }
+        return result;
+      }
 
-var zeit = results("messungNr")
+      function zeitInteval(begin, end, arry) {
+        var label = []
+        var dub = duplicate_array(arry)
+        // label.push(current)
+        for (var i = 0; i < arry.length; i++) {
+          if (arry[i] >= begin && arry[i] < end) {
+            // if current element der erst ist hinzufügen
+            if (arry[i]!=arry[i+1]) {
+              label.push(arry[i])
+            }else {
+              label.push("")
+            }
+          }
+        }
+        return label
+      }
 
-// console.log(zeit);
-function zeitInteval(begin,end) {
-  var label = []
-  for (var i = 0; i < zeit.length; i++) {
-    if (zeit[i] >= begin && zeit[i] < end) {
-        label.push(zeit[i])
-    }else {
-      // console.log(zeit[i]);
-      continue
-    }
-  }
-  return label
-}
+      function search(begin, end, arry) {
+        return arry.slice(begin, arry.length)
+      }
 
-function search(begin,end,arry) {
-  return arry.slice(begin,arry.length)
-}
+      var datagraph = {
+        labels: zeitInteval(0, 107, zeit),
+        datasets: [{
+            label: "temperatur",
+            fill: false,
+            lineTension: 0.3,
+            backgroundColor: "rgba(165,42,42,0.4)",
+            borderColor: "rgba(165,42,42,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(165,42,42,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(165,42,42,1)",
+            pointHoverBorderColor: "rgba(165,42,42,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: tempArry,
+            spanGaps: false,
+          },
+          {
+            label: "lichtintensität",
+            fill: false,
+            lineTension: 0.3,
+            backgroundColor: "rgba(47,79,79,0.4)",
+            borderColor: "rgba(47,79,79,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(47,79,79,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(47,79,79,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: lichtArry,
+            spanGaps: false,
+          },
+          {
+            label: "bodenfeuchtigkeit",
+            fill: false,
+            lineTension: 0.3,
+            backgroundColor: "rgba(124,252,0,0.4)",
+            borderColor: "rgba(124,252,0,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(124,252,0,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(124,252,0,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: bodenArry,
+            spanGaps: false,
+          },
+          {
+            label: "luftfeuchtigkeit",
+            fill: false,
+            lineTension: 0.3,
+            backgroundColor: "rgba(255,215,0,0.4)",
+            borderColor: "rgba(255,215,0,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(255,215,0,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(255,215,0,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: feutArry,
+            spanGaps: false,
+          }
+        ]
+      };
 
-var datagraph = {
-  labels:zeitInteval(0,17),
-  datasets: [
-    {
-      label: "temperatur",
-      fill: false,
-      lineTension: 0.3,
-      backgroundColor: "rgba(165,42,42,0.4)",
-      borderColor: "rgba(165,42,42,1)",
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: "rgba(165,42,42,1)",
-      pointBackgroundColor: "#fff",
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: "rgba(165,42,42,1)",
-      pointHoverBorderColor: "rgba(165,42,42,1)",
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: tempArry,
-      spanGaps: false,
-    },
-    {
-      label: "lichtintensität",
-      fill: false,
-      lineTension: 0.3,
-      backgroundColor: "rgba(47,79,79,0.4)",
-      borderColor: "rgba(47,79,79,1)",
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: "rgba(47,79,79,1)",
-      pointBackgroundColor: "#fff",
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: "rgba(47,79,79,1)",
-      pointHoverBorderColor: "rgba(220,220,220,1)",
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: lichtArry,
-      spanGaps: false,
-    },
-    {
-      label: "bodenfeuchtigkeit",
-      fill: false,
-      lineTension: 0.3,
-      backgroundColor: "rgba(124,252,0,0.4)",
-      borderColor: "rgba(124,252,0,1)",
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: "rgba(124,252,0,1)",
-      pointBackgroundColor: "#fff",
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: "rgba(124,252,0,1)",
-      pointHoverBorderColor: "rgba(220,220,220,1)",
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: bodenArry,
-      spanGaps: false,
-    },
-    {
-      label: "luftfeuchtigkeit",
-      fill: false,
-      lineTension: 0.3,
-      backgroundColor: "rgba(255,215,0,0.4)",
-      borderColor: "rgba(255,215,0,1)",
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: "rgba(255,215,0,1)",
-      pointBackgroundColor: "#fff",
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: "rgba(255,215,0,1)",
-      pointHoverBorderColor: "rgba(220,220,220,1)",
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: feutArry,
-      spanGaps: false,
-    }
-  ]
-};
+      var lineChart = document.getElementById("lineChart")
+      var myLineChart = Chart.Line(lineChart, {
+        data: datagraph
+      })
 
-var lineChart = document.getElementById("lineChart")
-var myLineChart = Chart.Line(lineChart,{
-  data:datagraph
-})
+      var datagraph2 = {
+        labels: zeitInteval(0, 107, zeit2),
+        datasets: [{
+            label: "temperatur",
+            fill: false,
+            lineTension: 0.3,
+            backgroundColor: "rgba(165,42,42,0.4)",
+            borderColor: "rgba(165,42,42,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(165,42,42,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(165,42,42,1)",
+            pointHoverBorderColor: "rgba(165,42,42,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: tempArry2,
+            spanGaps: false,
+          },
+          {
+            label: "lichtintensität",
+            fill: false,
+            lineTension: 0.3,
+            backgroundColor: "rgba(47,79,79,0.4)",
+            borderColor: "rgba(47,79,79,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(47,79,79,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(47,79,79,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: lichtArry2,
+            spanGaps: false,
+          },
+          {
+            label: "bodenfeuchtigkeit",
+            fill: false,
+            lineTension: 0.3,
+            backgroundColor: "rgba(124,252,0,0.4)",
+            borderColor: "rgba(124,252,0,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(124,252,0,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(124,252,0,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: bodenArry2,
+            spanGaps: false,
+          },
+          {
+            label: "luftfeuchtigkeit",
+            fill: false,
+            lineTension: 0.3,
+            backgroundColor: "rgba(255,215,0,0.4)",
+            borderColor: "rgba(255,215,0,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(255,215,0,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(255,215,0,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: feutArry2,
+            spanGaps: false,
+          }
+        ]
+      };
 
-$("#selector").click(function () {
-  var target = document.getElementById("selector").value
-  console.log(target);
-  switch (target) {
-    case "A day ago":
-    myLineChart.data.labels =zeitInteval(0,2)
-    myLineChart.data.datasets[0].data =search(0,2,tempArry)
-    myLineChart.data.datasets[1].data =search(0,2,lichtArry)
-    myLineChart.data.datasets[2].data =search(0,2,bodenArry)
-    myLineChart.data.datasets[3].data =search(0,2,feutArry)
-    myLineChart.update()
-    console.log("was hier");
-    break;
-    case "A Week ago":
-    myLineChart.data.labels =zeitInteval(2,7)
-    myLineChart.data.datasets[0].data =search(2,7,tempArry)
-    myLineChart.data.datasets[1].data =search(2,7,lichtArry)
-    myLineChart.data.datasets[2].data =search(2,7,bodenArry)
-    myLineChart.data.datasets[3].data =search(2,7,feutArry)
-    myLineChart.update()
-    break;
-    case "A Month ago":
-    myLineChart.data.labels =zeitInteval(7,30)
-    myLineChart.data.datasets[0].data =search(7,30,tempArry)
-    myLineChart.data.datasets[1].data =search(7,30,lichtArry)
-    myLineChart.data.datasets[2].data =search(7,30,bodenArry)
-    myLineChart.data.datasets[3].data =search(7,30,feutArry)
-    myLineChart.update()
-    break;
-    default:
-    myLineChart.data.labels =zeitInteval(0,7)
-    myLineChart.data.datasets[0].data =search(0,2,tempArry)
-    myLineChart.data.datasets[1].data =search(0,2,lichtArry)
-    myLineChart.data.datasets[2].data =search(0,2,bodenArry)
-    myLineChart.data.datasets[3].data =search(0,2,feutArry)
-    myLineChart.update()
-  }
-})
+      var lineChart = document.getElementById("lineChart2")
+      var myLineChart2 = Chart.Line(lineChart, {
+        data: datagraph2
+      })
+      $("#selector").click(function() {
+        var target = document.getElementById("selector").value
+        console.log(target);
+        switch (target) {
+          case "A day ago":
+            myLineChart.data.labels = zeitInteval(0, 2, zeit)
+            myLineChart.data.datasets[0].data = search(0, 2, tempArry)
+            myLineChart.data.datasets[1].data = search(0, 2, lichtArry)
+            myLineChart.data.datasets[2].data = search(0, 2, bodenArry)
+            myLineChart.data.datasets[3].data = search(0, 2, feutArry)
+            myLineChart.update()
+            console.log("was hier");
+            break;
+          case "A Week ago":
+            myLineChart.data.labels = zeitInteval(2, 7, zeit)
+            myLineChart.data.datasets[0].data = search(2, 7, tempArry)
+            myLineChart.data.datasets[1].data = search(2, 7, lichtArry)
+            myLineChart.data.datasets[2].data = search(2, 7, bodenArry)
+            myLineChart.data.datasets[3].data = search(2, 7, feutArry)
+            myLineChart.update()
+            break;
+          case "A Month ago":
+            myLineChart.data.labels = zeitInteval(7, 30, zeit)
+            myLineChart.data.datasets[0].data = search(7, 30, tempArry)
+            myLineChart.data.datasets[1].data = search(7, 30, lichtArry)
+            myLineChart.data.datasets[2].data = search(7, 30, bodenArry)
+            myLineChart.data.datasets[3].data = search(7, 30, feutArry)
+            myLineChart.update()
+            break;
+          default:
+            myLineChart.data.labels = zeitInteval(0, 7, zeit)
+            myLineChart.data.datasets[0].data = search(0, 2, tempArry)
+            myLineChart.data.datasets[1].data = search(0, 2, lichtArry)
+            myLineChart.data.datasets[2].data = search(0, 2, bodenArry)
+            myLineChart.data.datasets[3].data = search(0, 2, feutArry)
+            myLineChart.update()
+        }
+      })
+      $("#selector2").click(function() {
+        var target = document.getElementById("selector2").value
+        console.log(target);
+        switch (target) {
+          case "A day ago":
+            myLineChart2.data.labels = zeitInteval(0, 2, zeit2)
+            myLineChart2.data.datasets[0].data = search(0, 2, tempArry2)
+            myLineChart2.data.datasets[1].data = search(0, 2, lichtArry2)
+            myLineChart2.data.datasets[2].data = search(0, 2, bodenArry2)
+            myLineChart2.data.datasets[3].data = search(0, 2, feutArry2)
+            myLineChart2.update()
+            console.log("was hier");
+            break;
+          case "A Week ago":
+            myLineChart2.data.labels = zeitInteval(2, 7, zeit2)
+            myLineChart2.data.datasets[0].data = search(2, 7, tempArry2)
+            myLineChart2.data.datasets[1].data = search(2, 7, lichtArry2)
+            myLineChart2.data.datasets[2].data = search(2, 7, bodenArry2)
+            myLineChart2.data.datasets[3].data = search(2, 7, feutArry2)
+            myLineChart2.update()
+            break;
+          case "A Month ago":
+            myLineChart2.data.labels = zeitInteval(7, 30, zeit2)
+            myLineChart2.data.datasets[0].data = search(7, 30, tempArry2)
+            myLineChart2.data.datasets[1].data = search(7, 30, lichtArry2)
+            myLineChart2.data.datasets[2].data = search(7, 30, bodenArry2)
+            myLineChart2.data.datasets[3].data = search(7, 30, feutArry2)
+            myLineChart2.update()
+            break;
+          default:
+            myLineChart2.data.labels = zeitInteval(0, 7, zeit2)
+            myLineChart2.data.datasets[0].data = search(0, 2, tempArry2)
+            myLineChart2.data.datasets[1].data = search(0, 2, lichtArry2)
+            myLineChart2.data.datasets[2].data = search(0, 2, bodenArry2)
+            myLineChart2.data.datasets[3].data = search(0, 2, feutArry2)
+            myLineChart2.update()
+        }
+      })
+    </script>
 
-</script>
 
-
-<% include ../partials/footer %>
+    <% include ../partials/footer %>

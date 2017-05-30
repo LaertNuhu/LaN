@@ -19,10 +19,11 @@ var express = require ("express"),
 var statsRoute = require("./routes/stats")
 var plantsRoute = require("./routes/plants")
 var indexRoute = require("./routes/index")
+var apiRoute = require("./routes/api")
 
 // mongoose will be deleted
 // database connection is beeing handeled at config files
-mongoose.connect("mongodb://localhost/projekt")
+// mongoose.connect("mongodb://localhost/projekt")
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(methodOverride("_method"))
@@ -49,11 +50,12 @@ app.use(function (req,res,next) {
 })
 
 // Seed file used to reset DB and give inital conntent
-seedDB()
+// seedDB()
 
 app.use(statsRoute)
 app.use(indexRoute)
 app.use(plantsRoute)
+app.use(apiRoute)
 
 http.listen(3000,function () {
   console.log("Listening on port 3000");
