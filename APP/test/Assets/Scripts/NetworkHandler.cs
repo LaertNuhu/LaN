@@ -14,7 +14,7 @@ using UnityEngine;
 
 public class NetworkHandler {
 
-
+    public string currentData { get; private set; }
     string ip, user, password;
 
 	public NetworkHandler(string ip)
@@ -23,6 +23,13 @@ public class NetworkHandler {
 
         if (!IpIsAvailable(ip))
             throw new RaspberryPiNotFound("The target IP did not respond with an expected protocol or doesn't exist.");
+    }
+    
+    public IEnumerator Get()
+    {
+        WWW www = new WWW("https://pcps.herokuapp.com/showAll");
+        yield return www;
+        currentData = www.text;
     }
     public bool Connect(string user, string password)
     {

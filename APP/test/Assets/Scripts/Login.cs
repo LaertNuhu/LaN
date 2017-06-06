@@ -17,13 +17,15 @@ public class Login : MonoBehaviour {
     CameraMovement mov;
     CanvasGroup cg;
 	void Start () {
+        if(mainInterface != null)
+            mainInterface.alpha = 0;
 
-        mainInterface.alpha = 0;
-
+        TouchScreenKeyboard.hideInput = true;
         //get cameramover
         mov = Camera.main.GetComponent<CameraMovement>();
         cg = GetComponent<CanvasGroup>();
-        mov.Switch();
+        if(mov != null)
+            mov.Switch();
         
 	}
 	
@@ -56,7 +58,8 @@ public class Login : MonoBehaviour {
         {
             timePassed += Time.deltaTime;
             cg.alpha = 1 - timePassed / 0.5f;
-            mainInterface.alpha = timePassed / 0.5f;
+            if(mainInterface != null)
+                mainInterface.alpha = timePassed / 0.5f;
             yield return null;
         }
         cg.alpha = 0;

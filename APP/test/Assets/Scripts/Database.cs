@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LitJson;
 
 /**
     
@@ -12,7 +13,6 @@ using UnityEngine;
 public class Database {
 
     public List<State> state;
-
     NetworkHandler networkHandler;
     public Database(NetworkHandler networkHandler)
     {
@@ -47,6 +47,24 @@ public class Database {
             state.Add(s);
         }
             
+    }
+    public IEnumerator Refresh()
+    {
+        yield return networkHandler.Get();
+
+        //Creates the data
+        JsonData data = JsonMapper.ToObject(networkHandler.currentData);
+        Debug.Log(data[0][0]);
+
+        state.Clear();
+
+        for(int i = 0; i < data.Count; i++)
+        {
+            State s = new State();
+            s.humidity1 = ((int)data[i][3]);
+            s.heat1 = ((int)data[i][4]);
+            state.Add(s);
+        }
     }
     //Load state from local file and deserialize
     public void LoadState()
