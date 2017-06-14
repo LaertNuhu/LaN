@@ -16,37 +16,37 @@ router.get("/plants",isLoggedIn,function (req,res) {
       res.render("plants",{plants:plants})
     })
 })
+
 // CREATE
 router.post("/plants",isLoggedIn,function (req,res) {
   var val =
   [
     req.body.pflanzeName,
-    req.body.sollLuftFeMIN,
-    req.body.sollLuftFeMAX,
-    req.body.sollBodenMIN,
-    req.body.sollBodenMAX,
-    req.body.sollLichtMIN,
-    req.body.sollLichtMAX,
-    req.body.sollTempMIN,
-    req.body.sollTempMAX
+    req.body.sollLuftFeMin,
+    req.body.sollLuftFeMax,
+    req.body.sollBodenMin,
+    req.body.sollBodenMax,
+    req.body.lichtstunden,
+    req.body.sollTempMin,
+    req.body.sollTempMax
   ]
   connection.query('CREATE TABLE IF NOT EXISTS`' + dbconfig.database + '`.`' + dbconfig.pflanzen_table + '` ( \
       `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
       `pflanzeName` VARCHAR(20) NOT NULL , \
-      `sollLuftFeMIN` FLOAT NOT NULL, \
-      `sollLuftFeMAX` FLOAT NOT NULL, \
-      `sollBodenMIN` FLOAT NOT NULL, \
-      `sollBodenMAX` FLOAT NOT NULL, \
-      `sollLichtMIN` FLOAT NOT NULL, \
-      `sollLichtMAX` FLOAT NOT NULL, \
-      `sollTempMIN` FLOAT NOT NULL, \
-      `sollTempMAX` FLOAT NOT NULL, \
+      `sollLuftFeMin` FLOAT NOT NULL, \
+      `sollLuftFeMax` FLOAT NOT NULL, \
+      `sollBodenMin` FLOAT NOT NULL, \
+      `sollBodenMax` FLOAT NOT NULL, \
+      `lichtstunden` FLOAT NOT NULL, \
+      `sollTempMin` FLOAT NOT NULL, \
+      `sollTempMax` FLOAT NOT NULL, \
+      `active` tinyint(1),\
           PRIMARY KEY (`id`)\
   )',function (err, result) {
     if (err) {
       console.log(err);
     }
-    connection.query('INSERT INTO '+dbconfig.pflanzen_table+' (pflanzeName, sollLuftFeMIN, sollLuftFeMAX, sollBodenMIN,sollBodenMAX,sollLichtMIN,sollLichtMAX,sollTempMIN,sollTempMAX) VALUES (?,?,?,?,?,?,?,?,?);',val,function (err,values) {
+    connection.query('INSERT INTO '+dbconfig.pflanzen_table+' (pflanzeName, sollLuftFeMin, sollLuftFeMax, sollBodenMin,sollBodenMax,lichtstunden,sollTempMin,sollTempMax) VALUES (?,?,?,?,?,?,?,?);',val,function (err,values) {
       if (err) {
         console.log(err);
       }
@@ -89,22 +89,37 @@ router.get("/plants/:id/edit",isLoggedIn,function (req,res) {
 router.put("/plants/:id",isLoggedIn,function (req,res) {
   var val =
   [
-    req.body.pflanzeName,
-    req.body.sollLuftFeMIN,
-    req.body.sollLuftFeMAX,
-    req.body.sollBodenMIN,
-    req.body.sollBodenMAX,
-    req.body.sollLichtMIN,
-    req.body.sollLichtMAX,
-    req.body.sollTempMIN,
-    req.body.sollTempMAX
+    req.body.pflanzenName,
+    req.body.sollLuftFeMin,
+    req.body.sollLuftFeMax,
+    req.body.sollBodenMin,
+    req.body.sollBodenMax,
+    req.body.lichtstunden,
+    req.body.sollTempMin,
+    req.body.sollTempMax
   ]
-  connection.query('UPDATE pflanzen SET pflanzeName= ?, sollLuftFeMIN = ? ,sollLuftFeMAX=?, sollBodenMIN=?, sollBodenMAX=?, sollLichtMIN=?, sollLichtMAX=?, sollTempMIN=? ,sollTempMAX=? WHERE id='+req.params.id+'',val,function (err,newPlant) {
+  connection.query('UPDATE pflanzen SET pflanzenName= ?, sollLuftFeMin = ? ,sollBodenMax=?, sollBodenMin=?, sollBodenMax=?, lichtstunden=?, sollTempMin=? ,sollTempMax=? WHERE id='+req.params.id+'',val,function (err,newPlant) {
     if (err) {
       console.log(err);
     }
     // console.log(newPlant);
     res.redirect("/plants")
+  })
+})
+
+// Update set Active
+router.put("/plants/setActive/:id/",isLoggedIn,function (req,res) {
+  connection.query('UPDATE pflanzen SET active=? ',[false],function (err,newPlant) {
+    if (err) {
+      console.log(err);
+    }
+    connection.query('UPDATE pflanzen SET active=? WHERE id='+req.params.id+'',[true],function (err,newPlant) {
+      if (err) {
+        console.log(err);
+      }
+      // console.log(newPlant);
+      res.redirect("/plants")
+    })
   })
 })
 

@@ -45,7 +45,7 @@ router.get("/api/logout",function (req,res) {
 // Plants
 
 // Index
-router.get("/api/plants",function (req,res) {
+router.get("/api/plants",isLoggedIn,function (req,res) {
     connection.query('Select * from pflanzen',function (err,plants) {
       if (err) {
         console.log(err);
@@ -55,7 +55,7 @@ router.get("/api/plants",function (req,res) {
     })
 })
 // CREATE
-router.post("/api/plants",function (req,res) {
+router.post("/api/plants",isLoggedIn,function (req,res) {
   var val =
   [
     req.body.pflanzeName,
@@ -95,12 +95,12 @@ router.post("/api/plants",function (req,res) {
 })
 
 // NEW
-router.get("/api/plants/new",function (req,res) {
+router.get("/api/plants/new",isLoggedIn,function (req,res) {
   res.render("plants/new")
 })
 
 // SHOW
-router.get("/api/plants/:id",function (req,res) {
+router.get("/api/plants/:id",isLoggedIn,function (req,res) {
   // find by name
   connection.query('Select * from pflanzen where id="'+req.params.id+'"',function (err,plant) {
     if (err) {
@@ -112,7 +112,7 @@ router.get("/api/plants/:id",function (req,res) {
 })
 
 // Edit
-router.get("/api/plants/:id/edit",function (req,res) {
+router.get("/api/plants/:id/edit",isLoggedIn,function (req,res) {
   // console.log(req.params.id);
   connection.query('Select * from pflanzen where id = "'+req.params.id+'"',function (err,plant) {
     if (err) {
@@ -124,7 +124,7 @@ router.get("/api/plants/:id/edit",function (req,res) {
 })
 
 // Update
-router.put("/api/plants/:id",function (req,res) {
+router.put("/api/plants/:id",isLoggedIn,function (req,res) {
   var val =
   [
     req.body.pflanzeName,
@@ -147,7 +147,7 @@ router.put("/api/plants/:id",function (req,res) {
 })
 
 // Delete
-router.delete("/api/plants/:id",function (req,res) {
+router.delete("/api/plants/:id",isLoggedIn,function (req,res) {
   connection.query('Delete from '+dbconfig.database +'.'+dbconfig.pflanzen_table+' where id = '+req.params.id,function (err) {
     if (err) {
       console.log(err);
@@ -160,7 +160,7 @@ router.delete("/api/plants/:id",function (req,res) {
 
 // Stats
 // Create the Messung tabele and do the search. Change the graph conf.
-router.get("/api/stats" ,function (req,res) {
+router.get("/api/stats" ,isLoggedIn,function (req,res) {
   connection.query('CREATE TABLE IF NOT EXISTS `Messung` (\
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,\
     `arduinoNr` int(11) NOT NULL,\

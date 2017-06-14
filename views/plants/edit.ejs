@@ -3,30 +3,28 @@
 <div class="container">
 <form id="plants" action="/plants/<%=plant[0].id%>?_method=PUT" method="post">
   <div class="form-group">
-    <input class="form-control pflanzeName" type="text" name="pflanzeName" value="<%=plant[0].pflanzeName%>">
+    <input class="form-control pflanzeName" type="text" name="pflanzenName" value="<%=plant[0].pflanzeName%>">
     <div class="form-inline">
-      <label for="sollLuftFeMIN">MIN :</label>
-      <input class="form-control" type="number" id="sollLuftFeMIN" name="sollLuftFeMIN" value="<%=plant[0].sollLuftFeMIN%>">
-      <label for="sollLuftFeMAX">MAX :</label>
-      <input class="form-control" type="number" id="sollLuftFeMAX" name="sollLuftFeMAX" value="<%=plant[0].sollLuftFeMAX%>">
+      <label for="sollLuftFeMin">MIN :</label>
+      <input class="form-control" type="number" id="sollLuftFeMin" name="sollLuftFeMin" value="<%=plant[0].sollLuftFeMin%>">
+      <label for="sollLuftFeMax">MAX :</label>
+      <input class="form-control" type="number" id="sollLuftFeMax" name="sollLuftFeMax" value="<%=plant[0].sollLuftFeMax%>">
     </div>
     <div class="form-inline">
-      <label for="sollBodenMIN">MIN :</label>
-      <input class="form-control" type="number" id="sollBodenMIN" name="sollBodenMIN" value="<%=plant[0].sollBodenMIN%>">
-      <label for="sollBodenMAX">MAX :</label>
-      <input class="form-control" type="number" id="sollBodenMAX" name="sollBodenMAX" value="<%=plant[0].sollBodenMAX%>">
+      <label for="sollBodenMin">MIN :</label>
+      <input class="form-control" type="number" id="sollBodenMin" name="sollBodenMin" value="<%=plant[0].sollBodenMin%>">
+      <label for="sollBodenMax">MAX :</label>
+      <input class="form-control" type="number" id="sollBodenMax" name="sollBodenMax" value="<%=plant[0].sollBodenMax%>">
     </div>
     <div class="form-inline">
-      <label for="sollLichtMIN">MIN :</label>
-      <input class="form-control" type="number" id="sollLichtMIN" name="sollLichtMIN" value="<%=plant[0].sollLichtMIN%>">
-      <label for="sollLichtMAX">MAX :</label>
-      <input class="form-control" type="number" id="sollLichtMAX" name="sollLichtMAX" value="<%=plant[0].sollLichtMAX%>">
-    </div>
+      <label for="lichtstunden">Lichtstunden :</label>
+      <input class="form-control" type="number" id="lichtstunden" name="lichtstunden" value="<%=plant[0].lichtstunden%>">
+      </div>
     <div class="form-inline">
-      <label for="sollTempMIN">MIN :</label>
-      <input class="form-control" type="number" id="sollTempMIN" name="sollTempMIN" value="<%=plant[0].sollTempMIN%>">
-      <label for="sollTempMAX">MAX :</label>
-      <input class="form-control" type="number" id="sollTempMAX" name="sollTempMAX" value="<%=plant[0].sollTempMAX%>">
+      <label for="sollTempMin">MIN :</label>
+      <input class="form-control" type="number" id="sollTempMin" name="sollTempMin" value="<%=plant[0].sollTempMin%>">
+      <label for="sollTempMax">MAX :</label>
+      <input class="form-control" type="number" id="sollTempMax" name="sollTempMax" value="<%=plant[0].sollTempMax%>">
     </div>
     <button type="submit" class="btn btn-primary send"name="button">Send</button>
   </div>

@@ -5,32 +5,40 @@
         <div class="col-md-4 col-md-offset-4">
           <div class="well">
             <p>
-              <span>Name: <b> <%=plant[0].pflanzeName%></b></span>
+              <span>Name: <b> <%=plant[0].pflanzenName%></b></span>
             </p>
             <p>
-              <span>sollLuftFeMIN: <%=plant[0].sollLuftFeMIN%> </span>
+              <span>sollLuftFeMIN: <%=plant[0].sollLuftFeMin%> </span>
             </p>
             <p>
-              <span>sollLuftFeMAX: <%=plant[0].sollLuftFeMAX%> </span>
+              <span>sollLuftFeMAX: <%=plant[0].sollLuftFeMax%> </span>
             </p>
             <p>
-              <span>sollBodenMIN: <%=plant[0].sollBodenMIN%> </span>
+              <span>sollBodenMIN: <%=plant[0].sollBodenMin%> </span>
             </p>
             <p>
-              <span>sollBodenMAX: <%=plant[0].sollBodenMAX%> </span>
+              <span>sollBodenMAX: <%=plant[0].sollBodenMax%> </span>
             </p>
             <p>
-              <span>sollLichtMIN: <%=plant[0].sollLichtMIN%> </span>
+              <span>Lichtstunden: <%=plant[0].lichtstunden%> </span>
             </p>
             <p>
-              <span>sollLichtMAX: <%=plant[0].sollLichtMAX%> </span>
+              <span>sollTempMIN: <%=plant[0].sollTempMin%> </span>
             </p>
             <p>
-              <span>sollTempMIN: <%=plant[0].sollTempMIN%> </span>
+              <span>sollTempMAX: <%=plant[0].sollTempMax%> </span>
             </p>
+            <%if (plant[0].active!=null && plant[0].active==0){%>
             <p>
-              <span>sollTempMAX: <%=plant[0].sollTempMAX%> </span>
+              <span>Nicht Active</span>
             </p>
+            <%}else if(plant[0].active!=null && plant[0].active==1){%>
+              <p>
+                <span>Active</span>
+              </p>
+            <%}else{%>
+              <span>---</span>
+            <%}%>
             <a class="btn btn-info btn-sm"href="/plants/<%=plant[0].id%>/edit">Edit</a>
             <form style="display:inline"action="/plants/<%=plant[0].id%>?_method=DELETE" method="post">
               <button class="btn btn-danger btn-sm"type="submit" name="button">Delete</button>
